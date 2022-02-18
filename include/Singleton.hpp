@@ -1,3 +1,6 @@
+#ifndef SINGLETON_HPP
+#define SINGLETON_HPP
+
 namespace K4
 {
 	template <typename T>
@@ -35,3 +38,4 @@ namespace K4
 	template <typename T>
 	T *Singleton<T>::m_pInstance = 0;
 }
+#endif

@@ -5,8 +5,22 @@ using namespace std;
 using namespace K4;
 #define FPS 1
 
+#include <ObjectPool.hpp>
+#include <MemoryPool.hpp>
+
+struct A {
+	int i, j, k;
+};
+
 int main()
 {
+	A *a = (A *)MemoryPool::get(sizeof(A));
+	OPcreate(A, 10);
+	A &aa = OPget(A);
+	OPput(A, &aa);
+	OPdestroy(A);
+
+	/*
 	bool quit = false;
 	Uint32 lastFrameStart = 0;
 	Uint32 currentTick;
@@ -25,5 +39,6 @@ int main()
 				cout << "ctrl + up pressed" << endl;
 		}
 	}
+	*/
 	return 0;
 }

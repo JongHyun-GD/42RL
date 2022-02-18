@@ -1,6 +1,15 @@
 #include <stdexcept>
 #include <MemoryPool.hpp>
 
+K4::MemoryPool::MemoryPool()
+{
+	if (!entry) {
+		entry = mem;
+		entry->size = POOLSIZE;
+		entry->next = entry;
+	}
+}
+
 void *K4::MemoryPool::get(std::size_t nbyte)
 {
 	std::size_t nunit;
@@ -8,11 +17,6 @@ void *K4::MemoryPool::get(std::size_t nbyte)
 
 	nunit  = (nbyte + sizeof(Header) - 1) % sizeof(Header) + 1;
 
-	if (!entry) {
-		entry = mem;
-		entry->size = POOLSIZE;
-		entry->next = entry;
-	}
 	prevp = entry;
 	p = prevp->next;
 	for (; ; prevp = p, p = p->next) {

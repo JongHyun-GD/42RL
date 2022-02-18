@@ -14,11 +14,19 @@ struct A {
 
 int main()
 {
+	MemoryPool::GetInstance();
+
 	A *a = (A *)MemoryPool::get(sizeof(A));
-	OPcreate(A, 10);
-	A &aa = OPget(A);
-	OPput(A, &aa);
-	OPdestroy(A);
+	MemoryPool::put(a);
+
+	MemoryPool::DestroyInstance();
+
+	ObjectPool<A>::GetInstance();
+
+	A &r = ObjectPool<A>::get();
+	ObjectPool<A>::put(&r);
+
+	ObjectPool<A>::DestroyInstance();
 
 	/*
 	bool quit = false;

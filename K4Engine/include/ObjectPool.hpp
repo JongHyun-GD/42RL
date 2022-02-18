@@ -3,31 +3,12 @@
 
 #include <cstddef>
 #include <stdexcept>
-
-#define OPcreate(T, n) ObjectPool<T>::create(n)
-#define OPdestroy(T) ObjectPool<T>::destroy()
-#define OPget(T) ObjectPool<T>::get()
-#define OPput(T, obj) ObjectPool<T>::put(obj)
-#define OPgrow(T, n) ObjectPool<T>::grow(n)
+#include <Singleton.hpp>
 
 namespace K4 {
 	template <typename T>
-	class ObjectPool {
+	class ObjectPool: public Singleton< ObjectPool<T> > {
 	public:
-		static void create(std::size_t size) {
-			if (exist)
-				return ;
-			exist = true;
-			while (size-- > 0)
-				add(new List());
-		}
-
-		static void destroy() {
-			exist = false;
-			while (head)
-				delete pop();
-		}
-
 		static T &get() {
 			if (!head)
 				throw ObjectPoolEmpty();
@@ -50,12 +31,25 @@ namespace K4 {
 		};
 
 	private:
-		ObjectPool();
+		friend class Singleton<ObjectPool>;
 
 		struct List {
 			T data;
 			List *next;
 		};
+
+		const static std::size_t POOLSIZE = 128 * 1024;
+		static List *head;
+
+		ObjectPool() {
+			for (std::size_t i = 0; i < POOLSIZE; i++)
+				add(new List());
+		}
+
+		~ObjectPool() {
+			while (head)
+				delete pop();
+		}
 
 		static void add(List *list) {
 			list->next = head;
@@ -67,16 +61,10 @@ namespace K4 {
 			head = head->next;
 			return ret;
 		}
-
-		static List *head;
-		static bool exist;
 	};
 }
 
 template <typename T>
-typename K4::ObjectPool<T>::List *K4::ObjectPool<T>::head = 0;
-
-template <typename T>
-bool K4::ObjectPool<T>::exist = false;
+typename K4::ObjectPool<T>::List *K4::ObjectPool<T>::head;
 
 #endif

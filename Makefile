@@ -3,4 +3,4 @@ NAME=42RL
 $(NAME) : all
 
 all :
-	clang++ main.cpp Input.cpp -g -o $(NAME) -I include -L lib -l SDL2-2.0.0
+	clang++ main.cpp -g -o $(NAME) -I include -I K4Engine -L lib -l SDL2-2.0.0

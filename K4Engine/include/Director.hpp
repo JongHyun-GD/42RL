@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SingleTon.hpp"
+#include "Singleton.hpp"
 #include "Scene.hpp"
 
 namespace K4{

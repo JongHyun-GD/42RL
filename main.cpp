@@ -1,9 +1,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Input.hpp"
 using namespace std;
-using namespace K4;
-#define FPS 1
+// using namespace K4;
 
 int main()
 {
@@ -14,15 +12,15 @@ int main()
 	SDL_Event event;
 
 	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Window *window = SDL_CreateWindow("42RL",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
 	while (!quit)
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
-			if (Input::GetKeyDown(KEY_W) || Input::GetKeyDown(KEY_UP))
-				cout << "Up pressed" << endl;
-			if (Input::GetMultiKeyDown(KEY_LCTRL, KEY_W))
-				cout << "ctrl + up pressed" << endl;
+			if (event.type == SDL_QUIT)
+				quit = true;
 		}
 	}
 	return 0;

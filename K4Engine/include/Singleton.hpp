@@ -11,7 +11,7 @@ namespace K4
 	public:
 		static T *GetInstance()
 		{
-			if (m_pInstance == NULL)
+			if (m_pInstance == 0)
 				m_pInstance = new T;
 			return m_pInstance;
 		};
@@ -21,7 +21,7 @@ namespace K4
 			if (m_pInstance)
 			{
 				delete m_pInstance;
-				m_pInstance = NULL;
+				m_pInstance = 0;
 			}
 		};
 

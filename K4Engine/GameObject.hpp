@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include "Transform.hpp"
 
 namespace K4{
 	class GameObject{
@@ -10,10 +11,10 @@ namespace K4{
 	private:
 		std::list<GameObject*> _children;
 
-
 	protected:
 		virtual void Start() = 0;
 		virtual void Update() = 0;
+		virtual void Render();
 	public:
 		void Destroy();
 		void AddChild(GameObject *obj);

@@ -8,6 +8,10 @@ namespace K4{
 			if (it) delete it;
 	}
 
+	void GameObject::Render(){
+		
+	}
+
 	void GameObject::Destroy(){
 		if (parent){
 			parent->_children.remove(this);

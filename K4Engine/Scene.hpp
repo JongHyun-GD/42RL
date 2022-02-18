@@ -11,6 +11,7 @@ namespace K4{
 
 		void StartAllObject(GameObject* obj = nullptr);
 		void UpdateAllObject(GameObject* obj = nullptr);
+		void RenderAllObject(GameObject* obj = nullptr);
 	protected:
 		virtual void Start() = 0;
 		virtual void Update() = 0;

@@ -3,8 +3,30 @@
 using namespace std;
 // using namespace K4;
 
+#include <ObjectPool.hpp>
+#include <MemoryPool.hpp>
+
+struct A {
+	int i, j, k;
+};
+
 int main()
 {
+	MemoryPool::GetInstance();
+
+	A *a = (A *)MemoryPool::get(sizeof(A));
+	MemoryPool::put(a);
+
+	MemoryPool::DestroyInstance();
+
+	ObjectPool<A>::GetInstance();
+
+	A &r = ObjectPool<A>::get();
+	ObjectPool<A>::put(&r);
+
+	ObjectPool<A>::DestroyInstance();
+
+	/*
 	bool quit = false;
 	Uint32 lastFrameStart = 0;
 	Uint32 currentTick;
@@ -23,5 +45,6 @@ int main()
 				quit = true;
 		}
 	}
+	*/
 	return 0;
 }

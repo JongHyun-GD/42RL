@@ -1,5 +1,6 @@
 *.o
 *.dSYM
+*.a
 .DS_Store
 42RL
 42Engine/include/SDL2/*

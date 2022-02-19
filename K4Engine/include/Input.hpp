@@ -47,32 +47,32 @@ namespace K4
 		KEY_RSHIFT = SDL_SCANCODE_RSHIFT
 	};
 
+	struct KeyState{
+		Uint8 lastState;
+		Uint8 currentState;
+		uint lastUpTime;
+		bool isDoubleDown;
+	};
+
 	class Input : public Singleton<Input>
 	{
 		friend class Singleton<Input>;
 		friend class Director;
 	public:
 		static int GetKeyDown(KeyCode keycode);
+		static int GetKey(KeyCode keycode);
 		static int GetKeyUp(KeyCode keycode);
 		static int GetMultiKeyDown(KeyCode keycode1, KeyCode keycode2);
-		static int GetMultiKeyUp(KeyCode keycode1, KeyCode keycode2);
 		static int GetDoubleKeyDown(KeyCode keyCode);
-		static std::vector<int> const &GetCachedState();
 	private:
+		KeyState _keyState[SDL_NUM_SCANCODES];
+		uint _currentTime;
+		const uint _updateInterval;
 
-		std::vector<int> cachedState;
-
-		Input()
-		{
-			cachedState = std::vector<int>(1024, 0);
-			lastUpdatedTime = -2000;
-			updateInterval = 1000;
-		};
-		~Input(){};
-		void UpdateKeyState(int currentTime);
-
-		unsigned int lastUpdatedTime;
-		unsigned int updateInterval;
+		Input();
+		virtual ~Input();
+		void UpdateKeyState(uint currentTime);
+		static KeyState const &GetKeyState(KeyCode keycode);
 	};
 }
 

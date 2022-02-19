@@ -5,17 +5,24 @@
 namespace K4{
 	using namespace std::chrono;
 
-	Director::Director(): _scene(nullptr), _needRun(true), _nextScene(nullptr) {}
+	Director::Director()
+		: _scene(nullptr), _needRun(true), _nextScene(nullptr), _window(nullptr) {
+		SDL_Init(SDL_INIT_VIDEO);
+	}
+
 	Director::~Director(){
 		if (_scene)
 			delete _scene;
+		if (_window)
+			SDL_DestroyWindow(_window);
+
+		SDL_Quit();
 	}
 
 	void Director::MainLoop(){
 		float timeSinceStart = 0.f;
 		SDL_Event event;
-		int curTime = SDL_GetTicks();
-
+		
 		_scene->StartAllObject();
 		_scene->Start();
 		while (_needRun && _scene){
@@ -23,12 +30,8 @@ namespace K4{
 			_scene->UpdateAllObject();
 			_scene->Update();
 
-			int endTime = SDL_GetTicks();
-			int deltaTime = endTime - curTime;
-			curTime = endTime;
-
 			// TEST CODE
-			Input::GetInstance()->UpdateKeyState(endTime);
+			Input::GetInstance()->UpdateKeyState(SDL_GetTicks());
 
 			if (_nextScene){
 				delete _scene;
@@ -55,6 +58,16 @@ namespace K4{
 
 	Scene* Director::CurrentScene(){
 		return Director::GetInstance()->_scene;
+	}
+
+	bool Director::Init(int width, int height){
+		auto pd = Director::GetInstance();
+		auto window = SDL_CreateWindow("42RL",
+			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+		if (!window)
+			return false;
+		pd->_window = window;
+		return true;
 	}
 
 	bool Director::Run(Scene *scene){

@@ -1,6 +1,7 @@
 *.o
 *.dSYM
+*.a
 .DS_Store
 42RL
-K4Engine/SDL2/*
+K4Engine/include/SDL2/*
 K4Engine/lib/*

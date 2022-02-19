@@ -19,7 +19,7 @@ namespace K4 {
 		MemoryPool();
 		~MemoryPool();
 		static void allocOne(std::size_t size);
-		static std::map<std::size_t, std::stack<void *>> map;
+		static std::map<std::size_t, std::stack<void* > > map;
 	};
 }
 #endif

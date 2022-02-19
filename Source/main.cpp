@@ -1,7 +1,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "Input.hpp"
 using namespace std;
-// using namespace K4;
+using namespace K4;
 
 int main()
 {
@@ -21,6 +22,10 @@ int main()
 		{
 			if (event.type == SDL_QUIT)
 				quit = true;
+			if (Input::GetKeyDown(KEY_W))
+				cout << "W pressed.\n";
+			if (Input::GetDoubleKeyDown(KEY_W))
+				cout << "W dashed.\n";
 		}
 	}
 	return 0;

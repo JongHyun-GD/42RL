@@ -1,9 +1,13 @@
 NAME=42RL
-
+HEADER = -I./source/
+ENGINE = K4Engine
+SRCS =	source/HelloWorld.cpp \
+		source/main.cpp
 $(NAME) : all
 
 all :
-	clang++ main.cpp -o $(NAME) -I./K4Engine/include `sdl2-config --cflags --libs` K4Engine/K4Engine.a
+	$(MAKE) -C ./$(ENGINE)
+	clang++ $(SRCS) $(HEADER) -o $(NAME) -I./$(ENGINE)/include `sdl2-config --cflags --libs` $(ENGINE)/$(ENGINE).a
 
 fclean:
 	rm -f $(NAME)

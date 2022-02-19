@@ -2,6 +2,7 @@
 
 #include "Singleton.hpp"
 #include "Scene.hpp"
+#include "Input.hpp"
 
 namespace K4{
 	class Director : public Singleton<Director>{

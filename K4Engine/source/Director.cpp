@@ -1,17 +1,20 @@
 #include "Director.hpp"
+#include "SDL2/SDL.h"
 #include <chrono>
 
 namespace K4{
 	using namespace std::chrono;
 
-	Director::Director(): _scene(nullptr), _needRun(true) {}
+	Director::Director(): _scene(nullptr), _needRun(true), _nextScene(nullptr) {}
 	Director::~Director(){
 		if (_scene)
 			delete _scene;
 	}
 
 	void Director::MainLoop(){
-		auto curTime = system_clock::now();
+		float timeSinceStart = 0.f;
+		SDL_Event event;
+		int curTime = SDL_GetTicks();
 
 		_scene->StartAllObject();
 		_scene->Start();
@@ -20,9 +23,12 @@ namespace K4{
 			_scene->UpdateAllObject();
 			_scene->Update();
 
-			auto endTime = system_clock::now();
-			duration<float> deltaTime = endTime - curTime;
+			int endTime = SDL_GetTicks();
+			int deltaTime = endTime - curTime;
 			curTime = endTime;
+
+			// TEST CODE
+			Input::GetInstance()->UpdateKeyState(endTime);
 
 			if (_nextScene){
 				delete _scene;
@@ -32,6 +38,10 @@ namespace K4{
 				_scene->StartAllObject();
 				_scene->Start();
 			}
+
+			SDL_PollEvent(&event);
+			if (event.type == SDL_QUIT)
+				Finish();
 		}
 	}
 

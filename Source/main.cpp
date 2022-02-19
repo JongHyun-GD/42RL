@@ -1,7 +1,14 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "Input.hpp"
+#include "Director.hpp"
+#include "HelloWorld.hpp"
 using namespace std;
-// using namespace K4;
+using namespace K4;
+
+struct A {
+	int i, j, k;
+};
 
 int main()
 {
@@ -9,19 +16,12 @@ int main()
 	Uint32 lastFrameStart = 0;
 	Uint32 currentTick;
 	int rightClicked = 0;
-	SDL_Event event;
 
+	Director* director = Director::GetInstance();
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window *window = SDL_CreateWindow("42RL",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
-	while (!quit)
-	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT)
-				quit = true;
-		}
-	}
+	Scene *scene = new HelloWorld;
+	director->Run(scene);
 	return 0;
 }

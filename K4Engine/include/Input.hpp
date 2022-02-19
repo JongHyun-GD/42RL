@@ -5,6 +5,7 @@
 #include "Singleton.hpp"
 #include "SDL2/SDL.h"
 #include <stdexcept>
+#include <vector>
 
 namespace K4
 {
@@ -49,15 +50,29 @@ namespace K4
 	class Input : public Singleton<Input>
 	{
 		friend class Singleton<Input>;
+		friend class Director;
 	public:
 		static int GetKeyDown(KeyCode keycode);
 		static int GetKeyUp(KeyCode keycode);
 		static int GetMultiKeyDown(KeyCode keycode1, KeyCode keycode2);
 		static int GetMultiKeyUp(KeyCode keycode1, KeyCode keycode2);
 		static int GetDoubleKeyDown(KeyCode keyCode);
+		static std::vector<int> const &GetCachedState();
 	private:
-		Input(){};
+
+		std::vector<int> cachedState;
+
+		Input()
+		{
+			cachedState = std::vector<int>(1024, 0);
+			lastUpdatedTime = -2000;
+			updateInterval = 1000;
+		};
 		~Input(){};
+		void UpdateKeyState(int currentTime);
+
+		unsigned int lastUpdatedTime;
+		unsigned int updateInterval;
 	};
 }
 

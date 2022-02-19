@@ -5,7 +5,8 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/K4Engine",
-                "${workspaceFolder}/Source"
+                "${workspaceFolder}/Source",
+                "${workspaceFolder}/K4Engine/include"
             ],
             "defines": [],
             "macFrameworkPath": [

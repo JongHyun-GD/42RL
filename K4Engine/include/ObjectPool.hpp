@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <stdexcept>
-#include <Singleton.hpp>
+#include "Singleton.hpp"
 
 namespace K4 {
 	template <typename T>

@@ -11,4 +11,5 @@ all :
 
 fclean:
 	rm -f $(NAME)
+	$(MAKE) -C ./$(ENGINE) fclean
 re:fclean all

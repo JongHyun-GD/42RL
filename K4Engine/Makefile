@@ -3,7 +3,9 @@ HEADER =-I./include
 SRCS =	source/Director.cpp \
 		source/GameObject.cpp \
 		source/Input.cpp \
-		source/Scene.cpp
+		source/MemoryPool.cpp \
+		source/Scene.cpp \
+
 OBJS=${SRCS:.cpp=.o}
 all: $(NAME)
 .cpp.o:$(SRCS)

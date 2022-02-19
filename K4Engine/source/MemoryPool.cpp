@@ -1,66 +1,68 @@
 #include <stdexcept>
 #include <MemoryPool.hpp>
 
-K4::MemoryPool::MemoryPool()
+K4::MemoryPool::MemoryPool() {}
+
+K4::MemoryPool::~MemoryPool()
 {
-	if (!entry) {
-		entry = mem;
-		entry->size = POOLSIZE;
-		entry->next = entry;
-	}
-}
-
-void *K4::MemoryPool::get(std::size_t nbyte)
-{
-	std::size_t nunit;
-	Header *prevp, *p;
-
-	nunit  = (nbyte + sizeof(Header) - 1) % sizeof(Header) + 1;
-
-	prevp = entry;
-	p = prevp->next;
-	for (; ; prevp = p, p = p->next) {
-		if (p->size >= nunit) {
-			if (p->size == nunit)
-				prevp->next = p->next;
-			else {
-				p->size -= nunit;
-				p += p->size;
-				p->size = nunit;
-			}
-			entry = prevp;
-			return (p + 1);
+	for (auto p : map) {
+		std::stack<void *> &stack = p.second;
+		while (!stack.empty()) {
+			free(stack.top());
+			stack.pop();
 		}
-		if (p == entry)
-			throw std::bad_alloc();
 	}
 }
 
-void K4::MemoryPool::put(void *obj)
+/* Because we return void *, we need strictest aligned memory
+ * max_align_t is for that purpose
+ */
+
+union BlockInfo {
+	std::size_t mapKey;
+	std::max_align_t nouse;
+};
+
+#define UNIT 128
+
+/* public */
+
+void K4::MemoryPool::preAlloc(std::size_t size, std::size_t n)
 {
-	Header *bp, *p;
-
-	bp = (Header *)obj - 1;
-	p = entry;
-	for (; ; p = p->next)
-		if (p < bp && p->next > bp ||
-		    p >= p->next && (p < bp || p->next > bp))
-			break;
-
-	if (bp + bp->size == p->next) {
-		bp->size += p->next->size;
-		bp->next = p->next->next;
-	} else
-		bp->next = p->next;
-
-	if (p + p->size == bp) {
-		p->size += bp->size;
-		p->next = bp->next;
-	} else
-		p->next = bp;
-
-	entry = p;
+	for (std::size_t i = 0; i < n; i++)
+		allocOne(size);
 }
 
-K4::MemoryPool::Header K4::MemoryPool::mem[POOLSIZE];
-K4::MemoryPool::Header *K4::MemoryPool::entry = 0;
+void *K4::MemoryPool::get(std::size_t size)
+{
+	std::size_t mapKey = (size + UNIT - 1) / UNIT;
+	std::stack<void *> &stack = map[mapKey];
+
+	if (stack.empty())
+		allocOne(size);
+	void *p = stack.top();
+	stack.pop();
+	return ((BlockInfo *)p + 1);
+}
+
+void K4::MemoryPool::put(void *p)
+{
+	BlockInfo *bp = (BlockInfo *)p - 1;
+	std::size_t mapKey = bp->mapKey;
+	map[mapKey].push(bp);
+}
+
+/* private */
+
+void K4::MemoryPool::allocOne(std::size_t size)
+{
+	std::size_t mapKey = (size + UNIT - 1) / UNIT;
+	std::size_t roundUpSize = mapKey * UNIT;
+	BlockInfo *p = (BlockInfo *)malloc(roundUpSize + sizeof(BlockInfo));
+	if (!p)
+		throw std::bad_alloc();
+	p->mapKey = mapKey;
+	map[mapKey].push(p);
+}
+
+std::map<std::size_t, std::stack<void *>> K4::MemoryPool::map;

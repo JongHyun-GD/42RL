@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Scene.hpp"
 
 namespace K4{

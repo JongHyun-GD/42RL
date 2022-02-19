@@ -1,8 +1,8 @@
 NAME=42RL
 HEADER = -I./source/
 ENGINE = K4Engine
-SRCS =	source/HelloWorld.cpp \
-		source/main.cpp
+SRCS =	Source/HelloWorld.cpp \
+		Source/main.cpp
 $(NAME) : all
 
 all :

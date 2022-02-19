@@ -5,7 +5,7 @@
 namespace K4{
 	using namespace std::chrono;
 
-	Director::Director(): _scene(nullptr), _needRun(true) {}
+	Director::Director(): _scene(nullptr), _needRun(true), _nextScene(nullptr) {}
 	Director::~Director(){
 		if (_scene)
 			delete _scene;
@@ -13,6 +13,7 @@ namespace K4{
 
 	void Director::MainLoop(){
 		float timeSinceStart = 0.f;
+		SDL_Event event;
 		int curTime = SDL_GetTicks();
 
 		_scene->StartAllObject();
@@ -37,6 +38,10 @@ namespace K4{
 				_scene->StartAllObject();
 				_scene->Start();
 			}
+
+			SDL_PollEvent(&event);
+			if (event.type == SDL_QUIT)
+				Finish();
 		}
 	}
 

@@ -50,11 +50,10 @@ void Input::UpdateKeyState(int currentTime)
 	{
 		// Update
 		int i = 0;
-		while (this->cachedState[i])
+		for (int i=0; i<keyStateSize; ++i)
 		{
 			if (state[i])
 				this->cachedState[i]++;
-			i++;
 		}
 	}
 	else
@@ -66,10 +65,7 @@ void Input::UpdateKeyState(int currentTime)
 		{
 			if (state[i])
 				this->cachedState[i]++;
-			i++;
 		}
 		this->lastUpdatedTime = currentTime;
-		std::cout << "Updated\n";
 	}
-
 }

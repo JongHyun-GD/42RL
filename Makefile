@@ -3,4 +3,8 @@ NAME=42RL
 $(NAME) : all
 
 all :
-	clang++ main.cpp -g -o $(NAME) -I include -I K4Engine -L lib -l SDL2-2.0.0
+	clang++ main.cpp -o $(NAME) -I./K4Engine/include `sdl2-config --cflags --libs` K4Engine/K4Engine.a
+
+fclean:
+	rm -f $(NAME)
+re:fclean all

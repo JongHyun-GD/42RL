@@ -3,5 +3,5 @@
 *.a
 .DS_Store
 42RL
-K4Engine/include/SDL2/*
-K4Engine/lib/*
+K4Engine/include/SDL2
+K4Engine/lib

@@ -2,30 +2,24 @@
 #define MEMORYPOOL_HPP
 
 #include <cstddef>
-#include "Singleton.hpp"
+#include <Singleton.hpp>
+#include <map>
+#include <stack>
 
 namespace K4 {
 	class MemoryPool: public Singleton<MemoryPool> {
+	friend class Singleton<MemoryPool>;
+
 	public:
-		static void *get(std::size_t nbyte);
-		static void put(void *obj);
+		static void preAlloc(std::size_t size, std::size_t n);
+		static void *get(std::size_t size);
+		static void put(void *p);
 
 	private:
-		friend class Singleton<MemoryPool>;
-
 		MemoryPool();
-
-		struct Header {
-			std::size_t size;
-			union {
-				Header *next;
-				std::max_align_t nouse;
-			};
-		};
-
-		static const std::size_t POOLSIZE = 128 * 1024;
-		static Header mem[POOLSIZE];
-		static Header *entry;
+		~MemoryPool();
+		static void allocOne(std::size_t size);
+		static std::map<std::size_t, std::stack<void *>> map;
 	};
 }
 #endif

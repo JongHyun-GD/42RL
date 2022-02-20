@@ -5,10 +5,12 @@ SRCS =	Source/HelloWorld.cpp \
 		Source/main.cpp
 $(NAME) : all
 
-all :
+all:
 	$(MAKE) -C ./$(ENGINE)
 	clang++ $(SRCS) $(HEADER) -o $(NAME) -I./$(ENGINE)/include `sdl2-config --cflags --libs` $(ENGINE)/$(ENGINE).a
 
+test: re
+	./$(NAME)
 fclean:
 	rm -f $(NAME)
 	$(MAKE) -C ./$(ENGINE) fclean
